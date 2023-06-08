@@ -71,7 +71,7 @@ def train_model(
 
                         match = torch.reshape(torch.eq(preds, labels).float(), (-1, 1))
                         acc = torch.mean(match)
-                        evidence = relu_evidence(outputs)
+                        evidence = relu_evidence(outputs) # F.relu(y)
                         alpha = evidence + 1
                         u = num_classes / torch.sum(alpha, dim=1, keepdim=True)
 
