@@ -71,9 +71,11 @@ def train_model(
 
                         match = torch.reshape(torch.eq(preds, labels).float(), (-1, 1))
                         acc = torch.mean(match)
-                        evidence = relu_evidence(outputs) # F.relu(y)
+                        evidence = relu_evidence(outputs)  # F.relu(y)  # ek
                         alpha = evidence + 1
-                        u = num_classes / torch.sum(alpha, dim=1, keepdim=True)
+                        u = num_classes / torch.sum(alpha, dim=1, keepdim=True)  
+                        # u = K/S = K/(sum(ei+ai), prior ai = 1 with uniform distribution
+                        # which means " i dont know " 
 
                         total_evidence = torch.sum(evidence, 1, keepdim=True)
                         mean_evidence = torch.mean(total_evidence)
