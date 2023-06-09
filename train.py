@@ -59,7 +59,7 @@ def train_model(
                 # forward
                 # track history if only in train
                 with torch.set_grad_enabled(phase == "train"):
-
+                    # ref https://zhuanlan.zhihu.com/p/427073494
                     if uncertainty:
                         y = one_hot_embedding(labels, num_classes)
                         y = y.to(device)
