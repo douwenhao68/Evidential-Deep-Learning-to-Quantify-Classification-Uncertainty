@@ -65,7 +65,7 @@ def train_model(
                         y = y.to(device)
                         outputs = model(inputs)
                         _, preds = torch.max(outputs, 1)
-   # In raw paper, pred' calculated by pi = aplpha_i/S
+   # In raw paper, prediction uncertainty calculated by pi = aplpha_i/S
    # https://muratsensoy.github.io/uncertainty.html
         """
         logits = tf.matmul(out3, W4) + b4
