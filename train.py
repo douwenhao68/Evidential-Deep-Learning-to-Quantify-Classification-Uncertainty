@@ -65,6 +65,8 @@ def train_model(
                         y = y.to(device)
                         outputs = model(inputs)
                         _, preds = torch.max(outputs, 1)
+                        # In raw paper, pred' calculated by pi = aplpha_i/S
+                        
                         loss = criterion(
                             outputs, y.float(), epoch, num_classes, 10, device
                         )
@@ -76,7 +78,7 @@ def train_model(
                         u = num_classes / torch.sum(alpha, dim=1, keepdim=True)  
                         # u = K/S = K/(sum(ei+ai), prior ai = 1 with uniform distribution
                         # which means " i dont know " 
-
+  
                         total_evidence = torch.sum(evidence, 1, keepdim=True)
                         mean_evidence = torch.mean(total_evidence)
                         mean_evidence_succ = torch.sum(
@@ -85,7 +87,7 @@ def train_model(
                         mean_evidence_fail = torch.sum(
                             torch.sum(evidence, 1, keepdim=True) * (1 - match)
                         ) / (torch.sum(torch.abs(1 - match)) + 1e-20)
-
+        
                     else:
                         outputs = model(inputs)
                         _, preds = torch.max(outputs, 1)
