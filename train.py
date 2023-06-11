@@ -65,8 +65,34 @@ def train_model(
                         y = y.to(device)
                         outputs = model(inputs)
                         _, preds = torch.max(outputs, 1)
-                        # In raw paper, pred' calculated by pi = aplpha_i/S
-                        
+   # In raw paper, pred' calculated by pi = aplpha_i/S
+   # https://muratsensoy.github.io/uncertainty.html
+        """
+        logits = tf.matmul(out3, W4) + b4
+        
+        evidence = logits2evidence(logits)
+        alpha = evidence + 1
+        
+        u = K / tf.reduce_sum(alpha, axis=1, keep_dims=True) #uncertainty
+        
+        prob = alpha/tf.reduce_sum(alpha, 1, keepdims=True) 
+        
+        loss = tf.reduce_mean(loss_function(Y, alpha, global_step, annealing_step))
+        l2_loss = (tf.nn.l2_loss(W3)+tf.nn.l2_loss(W4)) * lmb
+        
+        step = tf.train.AdamOptimizer().minimize(loss + l2_loss, global_step=global_step)
+        
+        # Calculate accuracy
+        pred = tf.argmax(logits, 1)
+        truth = tf.argmax(Y, 1)
+        match = tf.reshape(tf.cast(tf.equal(pred, truth), tf.float32),(-1,1))
+        acc = tf.reduce_mean(match)
+        
+        total_evidence = tf.reduce_sum(evidence,1, keepdims=True) 
+        mean_ev = tf.reduce_mean(total_evidence)
+        mean_ev_succ = tf.reduce_sum(tf.reduce_sum(evidence,1, keepdims=True)*match) / tf.reduce_sum(match+1e-20)
+        mean_ev_fail = tf.reduce_sum(tf.reduce_sum(evidence,1, keepdims=True)*(1-match)) / (tf.reduce_sum(tf.abs(1-match))+1e-20) 
+        """
                         loss = criterion(
                             outputs, y.float(), epoch, num_classes, 10, device
                         )
